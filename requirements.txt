@@ -1,0 +1,7 @@
+# El sistema de ventas solo usa la biblioteca estandar de Python
+# (json, os, datetime), por lo que no hay dependencias obligatorias
+# para ejecutarlo.
+#
+# Se incluye pytest por si mas adelante se agregan pruebas
+# automatizadas dentro de tests/.
+pytest>=7.4
