@@ -1,0 +1,16 @@
+{
+  "productos": [
+    {"nombre": "Coca Cola 500ml", "precio": 5.5, "stock": 45, "vendidos": 5},
+    {"nombre": "Agua Mineral 625ml", "precio": 2.0, "stock": 70, "vendidos": 10},
+    {"nombre": "Galletas Oreo", "precio": 3.5, "stock": 37, "vendidos": 3},
+    {"nombre": "Pan Integral", "precio": 4.0, "stock": 17, "vendidos": 8},
+    {"nombre": "Leche Gloria 1L", "precio": 6.2, "stock": 33, "vendidos": 2}
+  ],
+  "ventas": [
+    {"producto": "Coca Cola 500ml", "cantidad": 5, "precio_unitario": 5.5, "descuento": 0, "total": 27.5, "fecha": "2026-09-01"},
+    {"producto": "Agua Mineral 625ml", "cantidad": 10, "precio_unitario": 2.0, "descuento": 0, "total": 20.0, "fecha": "2026-09-02"},
+    {"producto": "Galletas Oreo", "cantidad": 3, "precio_unitario": 3.5, "descuento": 5, "total": 9.98, "fecha": "2026-09-03"},
+    {"producto": "Pan Integral", "cantidad": 8, "precio_unitario": 4.0, "descuento": 0, "total": 32.0, "fecha": "2026-09-04"},
+    {"producto": "Leche Gloria 1L", "cantidad": 2, "precio_unitario": 6.2, "descuento": 0, "total": 12.4, "fecha": "2026-09-05"}
+  ]
+}
