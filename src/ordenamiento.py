@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-ordenamiento.py - Algoritmos de ordenamiento vistos en clase
-(burbuja descendente y quicksort) y las funciones que los usan para
-ordenar la lista de productos.
-"""
-
 
 def burbuja_descendente(lista):
     n = len(lista)
@@ -26,8 +20,6 @@ def quicksort(lista):
 
 
 def acomodar(productos, valores, clave):
-    """Reordena la lista de productos siguiendo el orden ya calculado
-    en 'valores' para el campo 'clave' (precio o vendidos)."""
     ordenados = []
     copia = list(productos)
     for v in valores:

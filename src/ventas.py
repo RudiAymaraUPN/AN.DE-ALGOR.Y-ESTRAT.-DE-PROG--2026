@@ -3,6 +3,7 @@ import json
 import os
 
 from .productos import buscar_producto
+from .formato import imprimir_tabla, formatear_fecha, formatear_moneda
 
 
 def registrar_venta(productos, nombre, cantidad):
@@ -50,13 +51,22 @@ def mostrar_historial_ventas(historial_ventas):
     if len(historial_ventas) == 0:
         print("No hay ventas registradas.")
         return
-    print("N | Fecha | Producto | Cantidad | Precio | Descuento % | Total")
-    print("--------------------------------------------------------------")
-    i = 1
-    for v in historial_ventas:
-        print(i, "|", v["fecha"], "|", v["nombre"], "|", v["cantidad"], "|",
-              "S/", v["precio"], "|", v["descuento"], "|", "S/", v["total"])
-        i = i + 1
+    filas = []
+    for i, v in enumerate(historial_ventas, start=1):
+        filas.append([
+            str(i),
+            formatear_fecha(v["fecha"]),
+            v["nombre"],
+            str(v["cantidad"]),
+            formatear_moneda(v["precio"]),
+            "{:.1f}".format(v["descuento"]),
+            formatear_moneda(v["total"]),
+        ])
+    imprimir_tabla(
+        ["N", "Fecha", "Producto", "Cantidad", "Precio", "Descuento %", "Total"],
+        filas,
+        alineaciones=["der", "izq", "izq", "der", "der", "der", "der"],
+    )
 
 
 def total_recaudado(productos):

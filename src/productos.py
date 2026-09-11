@@ -2,6 +2,8 @@
 import json
 import os
 
+from .formato import imprimir_tabla, formatear_moneda
+
 
 def registrar_producto(productos, nombre, precio, stock):
     nombre = nombre.strip()
@@ -53,13 +55,20 @@ def mostrar_productos(productos):
     if len(productos) == 0:
         print("No hay productos registrados.")
         return
-    print("N | Nombre | Precio | Stock | Vendidos")
-    print("----------------------------------------")
-    i = 1
-    for p in productos:
-        print(i, "|", p["nombre"], "| S/", p["precio"], "|",
-              p["stock"], "|", p["vendidos"])
-        i = i + 1
+    filas = []
+    for i, p in enumerate(productos, start=1):
+        filas.append([
+            str(i),
+            p["nombre"],
+            formatear_moneda(p["precio"]),
+            str(p["stock"]),
+            str(p["vendidos"]),
+        ])
+    imprimir_tabla(
+        ["N", "Nombre", "Precio", "Stock", "Vendidos"],
+        filas,
+        alineaciones=["der", "izq", "der", "der", "der"],
+    )
 
 
 def producto_mas_vendido(productos):
@@ -73,12 +82,6 @@ def producto_mas_vendido(productos):
 
 
 def cargar_productos(ruta):
-    """
-    Lee la lista de productos desde el archivo JSON de ejemplo (clave
-    "productos"). Si el archivo no existe, esta corrupto, o algun
-    producto tiene un formato invalido, ese o esos registros se ignoran
-    y se informa por mensaje en vez de romper el programa.
-    """
     productos = []
 
     if not os.path.exists(ruta):
