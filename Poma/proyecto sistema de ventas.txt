@@ -1,0 +1,38 @@
+El proyecto consiste en un Sistema de Ventas e Inventario desarrollado en Python, pensado para un pequeño negocio comercial (como una bodega o minimarket) que actualmente lleva su control de ventas y stock de forma manual o en hojas 
+de cálculo. El sistema automatiza cuatro procesos clave: el registro de productos (código, nombre, precio y stock inicial), la búsqueda de productos dentro del inventario, el control y actualización automática del stock cada vez que 
+se realiza una venta, y la generación de la venta en sí, incluyendo la aplicación de un descuento porcentual, el cálculo del vuelto y la emisión de una boleta electrónica con el detalle completo de la transacción. Además, incorpora 
+una función adicional de valor para el negocio: la generación automática de combos de productos que sumen exactamente un presupuesto dado por el cliente, útil para armar promociones.
+
+Lo que hace especial a este sistema, desde el punto de vista académico del curso, es que cada una de sus funciones principales no se resolvió de cualquier manera, sino aplicando una estrategia de diseño de algoritmos específica y 
+justificada: la búsqueda de productos y el cálculo de totales usan recursividad, el cálculo del vuelto usa un algoritmo voraz, y la generación de combos promocionales usa backtracking. Esto demuestra que las tres técnicas no fueron 
+agregadas de forma forzada, sino que cada una resuelve el subproblema para el que es naturalmente más adecuada.
+
+Palabras clave
+
+Algoritmo voraz (greedy): es una estrategia que resuelve un problema tomando, en cada paso, la decisión que parece mejor en ese momento (la más "golosa" u óptima localmente), sin volver atrás a reconsiderarla después. No garantiza 
+siempre la mejor solución global en cualquier problema, pero en problemas como el cambio de moneda sí produce el resultado óptimo. En el sistema se usa para calcular el vuelto: en cada paso se entrega la moneda o billete más grande 
+posible sin pasarse del monto, hasta completar el vuelto con la menor cantidad de piezas.
+
+Recursividad (algoritmo recursivo): es una técnica en la que una función se llama a sí misma para resolver un problema, dividiéndolo en una versión más pequeña del mismo problema, hasta llegar a un caso base tan simple que ya no 
+necesita dividirse más (y ahí la función deja de llamarse a sí misma). En el sistema se usa en dos lugares: la búsqueda binaria de productos por código (cada llamada reduce a la mitad la lista donde se busca, hasta encontrar el 
+producto o quedarse sin lista) y el cálculo del subtotal del carrito (el subtotal total es el precio del primer producto más el subtotal recursivo de "todo lo demás" del carrito).
+
+Backtracking (vuelta atrás): es una técnica de búsqueda exhaustiva que explora todas las combinaciones posibles de una solución, pero de forma inteligente: en cada paso decide "incluyo este elemento o no", avanza, y si esa rama no 
+lleva a ningún resultado válido (o ya no puede llevar a uno), retrocede ("da marcha atrás") y prueba otro camino, sin perder tiempo explorando ramas que ya sabe que no sirven (a esto se le llama "poda"). En el sistema se usa para 
+generar combos: prueba agregar o no cada producto al combo, y descarta (poda) cualquier combinación que ya se pase del presupuesto del cliente, hasta encontrar todas las que suman exactamente ese monto.
+
+Qué hace el código, en detalle
+
+El archivo se organiza en tres bloques.
+
+El primero define el modelo de datos y el inventario. La clase Producto guarda código, nombre, precio y stock de cada artículo, y ItemVenta representa un producto dentro de un carrito de compra con su cantidad y subtotal. La clase 
+Inventario es el corazón del control de stock: registrar_producto agrega productos nuevos verificando que el código no exista; buscar_por_codigo ordena la lista de productos y llama a una función recursiva (_busqueda_binaria_recursiva) 
+que va partiendo la lista a la mitad hasta encontrar el producto o determinar que no existe; hay_stock_suficiente y descontar_stock controlan y actualizan las cantidades disponibles; y generar_combos_backtracking recorre recursivamente
+todos los productos decidiendo incluir o no cada uno en un combo, podando las ramas que ya superan el presupuesto, hasta devolver todas las combinaciones que calzan exactamente.
+
+El segundo bloque, ModuloVentas, maneja la parte comercial de la venta. calcular_subtotal suma el carrito de forma recursiva (precio del primer ítem más el subtotal recursivo del resto). aplicar_descuento calcula el monto final tras 
+restar el porcentaje indicado. calcular_vuelto_voraz es el algoritmo voraz que entrega el vuelto usando la mayor denominación posible en cada paso. registrar_venta junta todo: verifica stock, calcula subtotal, aplica descuento, calcula 
+vuelto, descuenta el stock vendido y arma los datos de la transacción. emitir_boleta toma esos datos y los imprime en consola con el formato de una boleta real, incluyendo el desglose del vuelto en billetes y monedas.
+
+El tercer bloque es el menú interactivo (menu()), que es lo que ves correr en el ide Spyder: carga 5 productos de ejemplo al iniciar, y luego muestra un menú en bucle donde el usuario elige una opción (registrar, buscar, listar, vender, 
+generar combos o salir), pidiendo los datos necesarios por teclado y mostrando el resultado de cada operación.
