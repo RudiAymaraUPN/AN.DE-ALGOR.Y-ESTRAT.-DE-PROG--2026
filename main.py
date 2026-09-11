@@ -21,6 +21,7 @@ from src.ordenamiento import (
     ordenar_por_precio,
     ordenar_por_vendidos,
 )
+from src.almacenamiento import guardar_datos
 from src.validaciones import (
     pausar,
     leer_texto_no_vacio,
@@ -60,6 +61,12 @@ while True:
             stock = leer_entero("Stock: ", minimo=0)
             exito, mensaje = registrar_producto(productos, nombre, precio, stock)
             print(mensaje)
+            if exito:
+                ok_guardado, mensaje_guardado = guardar_datos(
+                    RUTA_DATOS, productos, historial_ventas
+                )
+                if not ok_guardado:
+                    print(mensaje_guardado)
             pausar()
 
         elif opcion == "2":
@@ -96,6 +103,11 @@ while True:
                         "descuento": porcentaje,
                         "fecha": datetime.now().strftime("%Y-%m-%d %H:%M"),
                     })
+                    ok_guardado, mensaje_guardado = guardar_datos(
+                        RUTA_DATOS, productos, historial_ventas
+                    )
+                    if not ok_guardado:
+                        print(mensaje_guardado)
             pausar()
 
         elif opcion == "4":
