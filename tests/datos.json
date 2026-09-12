@@ -5,7 +5,8 @@
     {"nombre": "Galletas Oreo", "precio": 3.5, "stock": 37, "vendidos": 3},
     {"nombre": "Pan Integral", "precio": 4.0, "stock": 17, "vendidos": 8},
     {"nombre": "Leche Gloria 1L", "precio": 6.2, "stock": 33, "vendidos": 2},
-    {"nombre": "Detergente", "precio": 3.5, "stock": 99, "vendidos": 1}
+    {"nombre": "Detergente", "precio": 3.5, "stock": 99, "vendidos": 1},
+    {"nombre": "Jabon Bolivar", "precio": 5.0, "stock": 90, "vendidos": 10}
   ],
   "ventas": [
     {"producto": "Coca Cola 500ml", "cantidad": 5, "precio_unitario": 5.5, "descuento": 0, "total": 27.5, "fecha": "2026-09-01"},
@@ -13,6 +14,7 @@
     {"producto": "Galletas Oreo", "cantidad": 3, "precio_unitario": 3.5, "descuento": 5, "total": 9.98, "fecha": "2026-09-03"},
     {"producto": "Pan Integral", "cantidad": 8, "precio_unitario": 4.0, "descuento": 0, "total": 32.0, "fecha": "2026-09-04"},
     {"producto": "Leche Gloria 1L", "cantidad": 2, "precio_unitario": 6.2, "descuento": 0, "total": 12.4, "fecha": "2026-09-05"},
-    {"producto": "Detergente", "cantidad": 1, "precio_unitario": 3.5, "descuento": 3.5, "total": 3.5, "fecha": "2026-09-11 16:58"}
+    {"producto": "Detergente", "cantidad": 1, "precio_unitario": 3.5, "descuento": 3.5, "total": 3.5, "fecha": "2026-09-11 16:58"},
+    {"producto": "Jabon Bolivar", "cantidad": 10, "precio_unitario": 5.0, "descuento": 0.0, "total": 50.0, "fecha": "2026-09-12 17:19"}
   ]
 }
