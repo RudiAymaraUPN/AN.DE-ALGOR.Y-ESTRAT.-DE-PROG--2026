@@ -86,7 +86,8 @@ def mostrar_opciones_compra(productos, monto, mostrar=10):
                    alineaciones=["der", "izq", "der", "der", "izq"], estilos_filas=estilos)
 
     combinaciones, truncado = combinaciones_posibles(productos, monto)
-    print(pintar("\nCombinaciones posibles (backtracking):", "negrita"))
+    # Las combinaciones se generan con backtracking
+    print(pintar("\nProductos posibles a comprar:", "negrita"))
     for numero, (gasto, unidades, partes) in enumerate(combinaciones[:mostrar], start=1):
         detalle = " + ".join(str(cant) + " x " + p["nombre"] for p, cant in partes)
         sobra = presupuesto - gasto
