@@ -127,36 +127,44 @@ while True:
                 mensaje_aviso("Primero registre productos.")
             else:
                 mostrar_productos(productos)
-                nombre = leer_texto_no_vacio("Producto a vender: ")
-                if buscar_producto(productos, nombre) is None:
+                nombre = leer_texto_no_vacio("Producto a vender (0 para cancelar): ")
+                while nombre != "0" and buscar_producto(productos, nombre) is None:
                     sugerido = sugerir_producto(productos, nombre)
                     if sugerido != "":
                         mensaje_aviso("No existe. Quizas quiso decir: " + sugerido)
                         if leer_si_no("Usar esa sugerencia? (s/n): "):
                             nombre = sugerido
-                cantidad = leer_entero("Cantidad: ", minimo=0, incluir_minimo=False)
-                detalle, mensaje = registrar_venta(productos, nombre, cantidad)
-                if detalle is None:
-                    mensaje_error(mensaje)
+                            break
+                    else:
+                        mensaje_aviso("No existe.")
+                    nombre = leer_texto_no_vacio("Indique el producto a vender (0 para cancelar): ")
+                if nombre == "0":
+                    mensaje_aviso("Venta cancelada.")
                 else:
-                    mensaje_ok(mensaje)
-                    porcentaje = leer_decimal(
-                        "Descuento en % (0 si no tiene): ", minimo=0, maximo=100
-                    )
-                    total_final, _ = aplicar_descuento(detalle["total"], porcentaje)
-                    print(generar_boleta(detalle, porcentaje))
-                    historial_ventas.append({
-                        "nombre": detalle["nombre"],
-                        "cantidad": detalle["cantidad"],
-                        "precio": detalle["precio"],
-                        "total": round(total_final, 2),
-                        "descuento": porcentaje,
-                        "fecha": datetime.now().strftime("%Y-%m-%d %H:%M"),
-                        "anulada": False,
-                    })
-                    guardar()
-                    if leer_si_no("Desea calcular el vuelto? (s/n): "):
-                        procesar_vuelto(total_final)
+                    mensaje_info("Producto elegido: " + buscar_producto(productos, nombre)["nombre"])
+                    cantidad = leer_entero("Cantidad: ", minimo=0, incluir_minimo=False)
+                    detalle, mensaje = registrar_venta(productos, nombre, cantidad)
+                    if detalle is None:
+                        mensaje_error(mensaje)
+                    else:
+                        mensaje_ok(mensaje)
+                        porcentaje = leer_decimal(
+                            "Descuento en % (0 si no tiene): ", minimo=0, maximo=100
+                        )
+                        total_final, _ = aplicar_descuento(detalle["total"], porcentaje)
+                        print(generar_boleta(detalle, porcentaje))
+                        historial_ventas.append({
+                            "nombre": detalle["nombre"],
+                            "cantidad": detalle["cantidad"],
+                            "precio": detalle["precio"],
+                            "total": round(total_final, 2),
+                            "descuento": porcentaje,
+                            "fecha": datetime.now().strftime("%Y-%m-%d %H:%M"),
+                            "anulada": False,
+                        })
+                        guardar()
+                        if leer_si_no("Desea calcular el vuelto? (s/n): "):
+                            procesar_vuelto(total_final)
             pausar()
 
         elif opcion == "6":
