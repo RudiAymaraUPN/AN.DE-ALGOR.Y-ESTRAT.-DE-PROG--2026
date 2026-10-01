@@ -3,6 +3,7 @@ import json
 import os
 
 from .formato import imprimir_tabla, formatear_moneda
+from .interfaz import mensaje_aviso
 
 
 def registrar_producto(productos, nombre, precio, stock):
@@ -53,9 +54,10 @@ def sugerir_producto(productos, nombre):
 
 def mostrar_productos(productos):
     if len(productos) == 0:
-        print("No hay productos registrados.")
+        mensaje_aviso("No hay productos registrados.")
         return
     filas = []
+    estilos = []
     for i, p in enumerate(productos, start=1):
         filas.append([
             str(i),
@@ -64,10 +66,18 @@ def mostrar_productos(productos):
             str(p["stock"]),
             str(p["vendidos"]),
         ])
+        # Stock bajo en color
+        if p["stock"] == 0:
+            estilos.append(("rojo",))
+        elif p["stock"] <= 5:
+            estilos.append(("amarillo",))
+        else:
+            estilos.append(())
     imprimir_tabla(
         ["N", "Nombre", "Precio", "Stock", "Vendidos"],
         filas,
         alineaciones=["der", "izq", "der", "der", "der"],
+        estilos_filas=estilos,
     )
 
 
