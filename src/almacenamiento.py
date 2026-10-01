@@ -31,6 +31,7 @@ def guardar_datos(ruta, productos, historial_ventas):
             "descuento": v["descuento"],
             "total": v["total"],
             "fecha": v["fecha"],
+            "anulada": bool(v.get("anulada", False)),
         }
         for v in historial_ventas
     ]

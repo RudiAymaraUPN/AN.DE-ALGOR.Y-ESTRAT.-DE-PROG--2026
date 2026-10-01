@@ -4,8 +4,10 @@ Sistema de ventas por consola (proyecto academico: UPN, Analisis de
 Algoritmos y Estrategias de Programacion). Permite registrar
 productos, registrar ventas, generar boletas con descuento, ordenar
 productos (quicksort / burbuja descendente), buscar productos con
-autocorrector (distancia de edicion) y ver reportes e historial de
-ventas.
+autocorrector (distancia de edicion), anular ventas, sugerir que se
+puede comprar con un monto (backtracking), calcular el vuelto
+(algoritmo voraz) y ver reportes e historial de ventas. El menu usa
+colores y cajas para que sea facil de atender.
 
 ## Estructura del proyecto
 
@@ -20,6 +22,10 @@ sistema_ventas/
 │   ├── productos.py      # Registrar, buscar, sugerir y mostrar productos
 │   ├── ventas.py          # Registrar venta, boleta, historial, recaudado
 │   ├── ordenamiento.py    # quicksort, burbuja descendente, ordenar por precio/vendidos
+│   ├── backtracking.py    # Que se puede comprar con un monto (backtracking)
+│   ├── vuelto.py          # Calculo del vuelto con algoritmo voraz (greedy)
+│   ├── interfaz.py        # Colores, cajas y menus de la consola
+│   ├── formato.py         # Tablas y formato de moneda
 │   ├── validaciones.py    # Lectura segura de datos por consola (sin crashear)
 │   └── almacenamiento.py  # Guarda productos y ventas en el JSON (mini "base de datos")
 └── tests/
@@ -46,15 +52,45 @@ suficiente (no hace falta un motor de base de datos real).
 
 ## Menu
 
-1. Registrar producto
-2. Ver productos
-3. Registrar una venta
-4. Ordenar por precio
-5. Ordenar por mas vendidos
-6. Reporte de ventas
-7. Buscar producto
-8. Historial de ventas
-0. Salir
+```
+PRODUCTOS
+  1. Registrar producto
+  2. Ver productos
+  3. Buscar producto
+  4. Ordenar productos      (submenu: precio menor a mayor,
+                             precio mayor a menor, mas vendidos)
+VENTAS
+  5. Registrar una venta    (al final ofrece calcular el vuelto)
+  6. Anular una venta       (devuelve las unidades al stock)
+  7. Historial de ventas
+  8. Reporte de ventas
+CAJA
+  9. Que puedo comprar con un monto   (backtracking)
+ 10. Calcular vuelto                  (algoritmo voraz)
+  0. Salir
+```
+
+Despues de mostrar cada resultado el programa pide
+"Presione ENTER para volver al menu principal..." antes de volver
+a mostrar el menu.
+
+### Anular una venta
+Muestra las ventas activas, se elige el numero (N) y se confirma. La
+venta queda marcada como `ANULADA` en el historial (no se borra), las
+unidades vuelven al stock y se descuentan de "vendidos".
+
+### Que puedo comprar con un monto (backtracking)
+Se ingresa el monto que tiene el cliente (ej. S/ 2.00). El sistema
+muestra los productos que cuestan ese monto o menos y las
+combinaciones de productos que caben en el monto, respetando el
+stock. Las combinaciones se buscan con backtracking: se agrega un
+producto, se explora y, si no sirve, se deshace la eleccion.
+
+### Calcular vuelto (algoritmo voraz)
+Se ingresa el total y el monto recibido. En cada paso se entrega la
+denominacion mas grande que quepa en el vuelto restante (billetes de
+S/ 200, 100, 50, 20, 10 y monedas de S/ 5, 2, 1, 0.50, 0.20, 0.10 y
+0.05).
 
 ## Datos de ejemplo y persistencia
 
