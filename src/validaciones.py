@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
+from .interfaz import pintar, mensaje_error
+
 
 def pausar():
-    input("\nPresione ENTER para continuar...")
+    input(pintar("\nPresione ENTER para volver al menu principal...", "negrita", "amarillo"))
 
 
 def leer_texto_no_vacio(mensaje):
@@ -9,7 +11,7 @@ def leer_texto_no_vacio(mensaje):
         texto = input(mensaje).strip()
         if texto != "":
             return texto
-        print("Este campo no puede estar vacio. Intente de nuevo.")
+        mensaje_error("Este campo no puede estar vacio. Intente de nuevo.")
 
 
 def leer_entero(mensaje, minimo=None, incluir_minimo=True):
@@ -18,14 +20,14 @@ def leer_entero(mensaje, minimo=None, incluir_minimo=True):
         try:
             valor = int(entrada)
         except ValueError:
-            print("Debe ingresar un numero entero valido.")
+            mensaje_error("Debe ingresar un numero entero valido.")
             continue
         if minimo is not None:
             if incluir_minimo and valor < minimo:
-                print("El valor debe ser mayor o igual a", minimo)
+                mensaje_error("El valor debe ser mayor o igual a " + str(minimo))
                 continue
             if not incluir_minimo and valor <= minimo:
-                print("El valor debe ser mayor a", minimo)
+                mensaje_error("El valor debe ser mayor a " + str(minimo))
                 continue
         return valor
 
@@ -36,17 +38,17 @@ def leer_decimal(mensaje, minimo=None, maximo=None, incluir_minimo=True):
         try:
             valor = float(entrada)
         except ValueError:
-            print("Debe ingresar un numero valido (ejemplo: 10.5).")
+            mensaje_error("Debe ingresar un numero valido (ejemplo: 10.5).")
             continue
         if minimo is not None:
             if incluir_minimo and valor < minimo:
-                print("El valor debe ser mayor o igual a", minimo)
+                mensaje_error("El valor debe ser mayor o igual a " + str(minimo))
                 continue
             if not incluir_minimo and valor <= minimo:
-                print("El valor debe ser mayor a", minimo)
+                mensaje_error("El valor debe ser mayor a " + str(minimo))
                 continue
         if maximo is not None and valor > maximo:
-            print("El valor debe ser menor o igual a", maximo)
+            mensaje_error("El valor debe ser menor o igual a " + str(maximo))
             continue
         return valor
 
@@ -58,4 +60,4 @@ def leer_si_no(mensaje):
             return True
         if respuesta in ("n", "no"):
             return False
-        print("Respuesta no valida. Escriba 's' o 'n'.")
+        mensaje_error("Respuesta no valida. Escriba 's' o 'n'.")

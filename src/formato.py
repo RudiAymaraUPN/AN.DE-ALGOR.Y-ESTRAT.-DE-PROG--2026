@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
+from .interfaz import pintar
 
-def imprimir_tabla(encabezados, filas, alineaciones=None):
+
+def imprimir_tabla(encabezados, filas, alineaciones=None, estilos_filas=None):
+    # Tabla con colores
     n_columnas = len(encabezados)
     if alineaciones is None:
         alineaciones = ["izq"] * n_columnas
@@ -23,10 +26,11 @@ def imprimir_tabla(encabezados, filas, alineaciones=None):
         return " | ".join(celdas)
 
     linea_encabezado = formatear_fila(encabezados)
-    print(linea_encabezado)
-    print("-" * len(linea_encabezado))
-    for fila in filas:
-        print(formatear_fila(fila))
+    print(pintar(linea_encabezado, "negrita", "cian"))
+    print(pintar("-" * len(linea_encabezado), "tenue"))
+    for indice, fila in enumerate(filas):
+        estilos = estilos_filas[indice] if estilos_filas else ()
+        print(pintar(formatear_fila(fila), *estilos))
 
 
 def formatear_fecha(fecha):
@@ -37,5 +41,5 @@ def formatear_fecha(fecha):
 
 
 def formatear_moneda(valor):
-    """Formatea un monto con 2 decimales fijos, ej. 'S/ 5.50'."""
+    # Formato S/ 0.00
     return "S/ {:.2f}".format(valor)
