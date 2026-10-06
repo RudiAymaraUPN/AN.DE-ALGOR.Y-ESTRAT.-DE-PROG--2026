@@ -6,7 +6,8 @@ productos, registrar ventas, generar boletas con descuento, ordenar
 productos (quicksort / burbuja descendente), buscar productos con
 autocorrector (distancia de edicion), anular ventas, sugerir que se
 puede comprar con un monto (backtracking), calcular el vuelto
-(algoritmo voraz) y ver reportes e historial de ventas. El menu usa
+(algoritmo voraz), ver el reporte del dia e historial de ventas por fecha, y comparar la
+rapidez de algoritmos (solo para la clase). El menu usa
 colores y cajas para que sea facil de atender.
 
 ## Estructura del proyecto
@@ -23,6 +24,7 @@ sistema_ventas/
 │   ├── ventas.py          # Registrar venta, boleta, historial, recaudado
 │   ├── ordenamiento.py    # quicksort, burbuja descendente, ordenar por precio/vendidos
 │   ├── backtracking.py    # Que se puede comprar con un monto (backtracking)
+│   ├── comparacion.py     # Compara tiempos: burbuja, quicksort y backtracking (clase)
 │   ├── vuelto.py          # Calculo del vuelto con algoritmo voraz (greedy)
 │   ├── interfaz.py        # Colores, cajas y menus de la consola
 │   ├── formato.py         # Tablas y formato de moneda
@@ -62,17 +64,35 @@ PRODUCTOS
 VENTAS
   5. Registrar una venta    (al final ofrece calcular el vuelto)
   6. Anular una venta       (devuelve las unidades al stock)
-  7. Historial de ventas
-  8. Reporte de ventas
+  7. Historial de ventas    (pide la fecha a consultar)
+  8. Reporte de ventas      (solo las ventas del dia de hoy)
 CAJA
   9. Que puedo comprar con un monto   (backtracking)
  10. Calcular vuelto                  (algoritmo voraz)
+CLASE (solo demostracion)
+ 11. Comparar rapidez de algoritmos   (burbuja, quicksort, backtracking)
   0. Salir
 ```
 
 Despues de mostrar cada resultado el programa pide
 "Presione ENTER para volver al menu principal..." antes de volver
 a mostrar el menu.
+
+### Historial de ventas
+Pide la fecha a consultar en formato `AAAA-MM-DD`. Con ENTER muestra las
+ventas de hoy y escribiendo `todas` muestra el historial completo. El
+numero N de cada venta es siempre el real (el mismo que se usa para anular).
+
+### Reporte de ventas
+Muestra la fecha del reporte (hoy) y calcula solo las ventas de ese dia:
+producto mas vendido, ventas realizadas, unidades, total recaudado
+(con descuentos aplicados) y ventas anuladas.
+
+### Comparar rapidez de algoritmos (solo clase)
+Mide el tiempo de quicksort, burbuja (sobre N datos aleatorios) y
+backtracking (sobre N productos de prueba) y los ordena del mas rapido
+al mas lento, con su complejidad. Esta opcion es solo una demostracion
+para la clase: no forma parte del sistema de ventas.
 
 ### Anular una venta
 Muestra las ventas activas, se elige el numero (N) y se confirma. La
@@ -94,7 +114,7 @@ S/ 200, 100, 50, 20, 10 y monedas de S/ 5, 2, 1, 0.50, 0.20, 0.10 y
 
 ## Datos de ejemplo y persistencia
 
-`tests/datos.json` trae 5 productos y 5 ventas de ejemplo, para que
+`tests/datos.json` trae productos y ventas de ejemplo, para que
 el sistema no arranque vacio al presentarlo. Si el archivo no existe
 o esta mal formado, el programa avisa por consola y arranca vacio en
 vez de caerse. Desde ahi, cada producto o venta que se registre en el

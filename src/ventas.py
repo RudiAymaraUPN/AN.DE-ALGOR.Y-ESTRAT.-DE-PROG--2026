@@ -73,12 +73,15 @@ def generar_boleta(detalle, porcentaje):
     return b
 
 
-def mostrar_historial_ventas(historial_ventas, solo_activas=False):
+def mostrar_historial_ventas(historial_ventas, solo_activas=False, fecha=None):
+    # fecha = "AAAA-MM-DD" para ver solo ese dia (None = todas). El N conserva el numero real
     filas = []
     estilos = []
     for i, v in enumerate(historial_ventas, start=1):
         anulada = v.get("anulada", False)
         if solo_activas and anulada:
+            continue
+        if fecha is not None and str(v["fecha"])[:10] != fecha:
             continue
         filas.append([
             str(i),
@@ -92,7 +95,10 @@ def mostrar_historial_ventas(historial_ventas, solo_activas=False):
         ])
         estilos.append(("rojo", "tenue") if anulada else ())
     if len(filas) == 0:
-        mensaje_aviso("No hay ventas registradas.")
+        if fecha is not None:
+            mensaje_aviso("No hay ventas registradas el " + fecha + ".")
+        else:
+            mensaje_aviso("No hay ventas registradas.")
         return
     imprimir_tabla(
         ["N", "Fecha", "Producto", "Cantidad", "Precio", "Descuento %", "Total", "Estado"],
@@ -100,6 +106,31 @@ def mostrar_historial_ventas(historial_ventas, solo_activas=False):
         alineaciones=["der", "izq", "izq", "der", "der", "der", "der", "izq"],
         estilos_filas=estilos,
     )
+
+
+def resumen_del_dia(historial_ventas, fecha):
+    # Calcula solo las ventas de un dia (ventas activas y anuladas)
+    ventas = 0
+    unidades = 0
+    total = 0
+    anuladas = 0
+    por_producto = {}
+    for v in historial_ventas:
+        if str(v["fecha"])[:10] != fecha:
+            continue
+        if v.get("anulada", False):
+            anuladas = anuladas + 1
+            continue
+        ventas = ventas + 1
+        unidades = unidades + v["cantidad"]
+        total = total + v["total"]
+        por_producto[v["nombre"]] = por_producto.get(v["nombre"], 0) + v["cantidad"]
+    mas_vendido = None
+    for nombre, cantidad in por_producto.items():
+        if mas_vendido is None or cantidad > mas_vendido[1]:
+            mas_vendido = (nombre, cantidad)
+    return {"ventas": ventas, "unidades": unidades, "total": total,
+            "anuladas": anuladas, "mas_vendido": mas_vendido}
 
 
 def total_recaudado(productos):
