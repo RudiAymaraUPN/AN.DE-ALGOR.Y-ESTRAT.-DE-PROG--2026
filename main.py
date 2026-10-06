@@ -2,13 +2,14 @@
 import os
 from datetime import datetime
 
-from src.productos import (registrar_producto,buscar_producto,sugerir_producto,mostrar_productos,producto_mas_vendido,cargar_productos)
-from src.ventas import (registrar_venta,generar_boleta,mostrar_historial_ventas,total_recaudado,cargar_historial_ventas,aplicar_descuento,obtener_venta_activa,anular_venta)
+from src.productos import (registrar_producto,buscar_producto,sugerir_producto,mostrar_productos,cargar_productos)
+from src.ventas import (registrar_venta,generar_boleta,mostrar_historial_ventas,resumen_del_dia,cargar_historial_ventas,aplicar_descuento,obtener_venta_activa,anular_venta)
 from src.ordenamiento import (ordenar_por_precio,ordenar_por_vendidos)
 from src.almacenamiento import guardar_datos
-from src.validaciones import (pausar,leer_texto_no_vacio,leer_entero,leer_decimal,leer_si_no)
+from src.validaciones import (pausar,leer_texto_no_vacio,leer_entero,leer_decimal,leer_si_no,leer_fecha)
 from src.backtracking import mostrar_opciones_compra
 from src.vuelto import procesar_vuelto
+from src.comparacion import mostrar_comparacion
 from src.formato import formatear_moneda
 from src.interfaz import (pintar,encabezado,imprimir_menu,pedir_opcion,mensaje_ok,mensaje_error,mensaje_aviso,mensaje_info)
 
@@ -33,6 +34,10 @@ MENU_PRINCIPAL = [
     ("CAJA", "magenta", [
         ("9", "Que puedo comprar con un monto"),
         ("10", "Calcular vuelto"),
+    ]),
+    # Solo para la clase (demostracion); no forma parte del sistema de ventas
+    ("CLASE (solo demostracion)", "amarillo", [
+        ("11", "Comparar rapidez de algoritmos"),
     ]),
 ]
 
@@ -196,27 +201,30 @@ while True:
 
         elif opcion == "7":
             encabezado("Historial de ventas")
-            mostrar_historial_ventas(historial_ventas)
+            fecha = leer_fecha("Fecha a consultar (AAAA-MM-DD, ENTER = hoy, 'todas' = sin filtro): ")
+            if fecha is None:
+                mostrar_historial_ventas(historial_ventas)
+            else:
+                print("Ventas del dia:", pintar(fecha, "negrita"))
+                mostrar_historial_ventas(historial_ventas, fecha=fecha)
             pausar()
 
         elif opcion == "8":
-            encabezado("Reporte de ventas")
-            if len(productos) == 0:
-                mensaje_aviso("No hay datos.")
+            encabezado("Reporte de ventas del dia")
+            hoy = datetime.now().strftime("%Y-%m-%d")
+            print("Fecha del reporte:", pintar(hoy, "negrita"))
+            resumen = resumen_del_dia(historial_ventas, hoy)
+            if resumen["ventas"] == 0 and resumen["anuladas"] == 0:
+                mensaje_aviso("Aun no hay ventas registradas hoy.")
             else:
-                mejor = producto_mas_vendido(productos)
-                if mejor["vendidos"] > 0:
-                    print("Mas vendido:", pintar(mejor["nombre"], "negrita"), "-",
-                          mejor["vendidos"], "unidades")
-                else:
-                    print("Aun no hay ventas.")
-                print("Total recaudado:", pintar(formatear_moneda(total_recaudado(productos)),
+                if resumen["mas_vendido"] is not None:
+                    print("Mas vendido:", pintar(resumen["mas_vendido"][0], "negrita"), "-",
+                          resumen["mas_vendido"][1], "unidades")
+                print("Ventas realizadas:", resumen["ventas"],
+                      "| Unidades vendidas:", resumen["unidades"])
+                print("Total recaudado:", pintar(formatear_moneda(resumen["total"]),
                                                  "negrita", "verde"))
-                anuladas = 0
-                for v in historial_ventas:
-                    if v.get("anulada", False):
-                        anuladas = anuladas + 1
-                print("Ventas anuladas:", anuladas)
+                print("Ventas anuladas:", resumen["anuladas"])
             pausar()
 
         elif opcion == "9":
@@ -232,6 +240,13 @@ while True:
             encabezado("Calcular vuelto")
             total = leer_decimal("Total a cobrar: S/ ", minimo=0, incluir_minimo=False)
             procesar_vuelto(total)
+            pausar()
+
+        elif opcion == "11":
+            encabezado("Comparar rapidez de algoritmos")
+            n_datos = leer_entero("Cantidad de datos a ordenar (1 a 5000): ", minimo=1, maximo=5000)
+            n_prod = leer_entero("Cantidad de productos para backtracking (1 a 15): ", minimo=1, maximo=15)
+            mostrar_comparacion(n_datos, n_prod)
             pausar()
 
         elif opcion == "0":

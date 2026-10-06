@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from datetime import datetime
+
 from .interfaz import pintar, mensaje_error
 
 
@@ -14,7 +16,7 @@ def leer_texto_no_vacio(mensaje):
         mensaje_error("Este campo no puede estar vacio. Intente de nuevo.")
 
 
-def leer_entero(mensaje, minimo=None, incluir_minimo=True):
+def leer_entero(mensaje, minimo=None, incluir_minimo=True, maximo=None):
     while True:
         entrada = input(mensaje)
         try:
@@ -29,6 +31,9 @@ def leer_entero(mensaje, minimo=None, incluir_minimo=True):
             if not incluir_minimo and valor <= minimo:
                 mensaje_error("El valor debe ser mayor a " + str(minimo))
                 continue
+        if maximo is not None and valor > maximo:
+            mensaje_error("El valor debe ser menor o igual a " + str(maximo))
+            continue
         return valor
 
 
@@ -61,3 +66,17 @@ def leer_si_no(mensaje):
         if respuesta in ("n", "no"):
             return False
         mensaje_error("Respuesta no valida. Escriba 's' o 'n'.")
+
+
+def leer_fecha(mensaje):
+    # Devuelve "AAAA-MM-DD". ENTER = hoy. "todas" = None (sin filtro)
+    while True:
+        entrada = input(mensaje).strip()
+        if entrada == "":
+            return datetime.now().strftime("%Y-%m-%d")
+        if entrada.lower() == "todas":
+            return None
+        try:
+            return datetime.strptime(entrada, "%Y-%m-%d").strftime("%Y-%m-%d")
+        except ValueError:
+            mensaje_error("Fecha no valida. Use el formato AAAA-MM-DD (ejemplo: 2026-10-01).")
